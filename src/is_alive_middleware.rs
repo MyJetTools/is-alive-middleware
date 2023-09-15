@@ -23,6 +23,7 @@ impl IsAliveMiddleware {
                 version: app_version,
                 env_info,
                 started: DateTimeAsMicroseconds::now().unix_microseconds,
+                compiled: my_http_server::macros::pkg_compile_date_time!(),
             },
         }
     }
@@ -55,4 +56,5 @@ pub struct IsAliveContract {
     version: String,
     env_info: Option<String>,
     started: i64,
+    compiled: &'static str,
 }
