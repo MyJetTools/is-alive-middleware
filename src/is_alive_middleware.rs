@@ -1,7 +1,4 @@
-use my_http_server::{
-    HttpContext, HttpFailResult, HttpOkResult, HttpOutput, HttpServerMiddleware,
-    HttpServerRequestFlow,
-};
+use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput, HttpServerMiddleware};
 use rust_extensions::date_time::DateTimeAsMicroseconds;
 use serde::{Deserialize, Serialize};
 
@@ -34,8 +31,7 @@ impl HttpServerMiddleware for IsAliveMiddleware {
     async fn handle_request(
         &self,
         ctx: &mut HttpContext,
-        get_next: &mut HttpServerRequestFlow,
-    ) -> Result<HttpOkResult, HttpFailResult> {
+    ) -> Option<Result<HttpOkResult, HttpFailResult>> {
         if ctx
             .request
             .http_path
@@ -46,7 +42,7 @@ impl HttpServerMiddleware for IsAliveMiddleware {
                 .into();
         }
 
-        get_next.next(ctx).await
+        None
     }
 }
 
