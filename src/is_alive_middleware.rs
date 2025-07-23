@@ -14,15 +14,21 @@ impl IsAliveMiddleware {
             None
         };
 
-        Self {
+        let mut result = Self {
             is_alive: IsAliveContract {
                 name: app_name,
                 version: app_version,
                 env_info,
                 started: DateTimeAsMicroseconds::now().unix_microseconds,
-                compiled: my_http_server::macros::pkg_compile_date_time!(),
+                compiled: my_http_server::macros::pkg_compile_date_time!().to_string(),
             },
+        };
+
+        if let Ok(compile_time) = std::env::var("COMPILE_TIME") {
+            result.is_alive.compiled = compile_time;
         }
+
+        result
     }
 }
 
@@ -52,5 +58,5 @@ pub struct IsAliveContract {
     version: String,
     env_info: Option<String>,
     started: i64,
-    compiled: &'static str,
+    compiled: String,
 }
